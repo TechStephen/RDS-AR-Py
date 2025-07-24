@@ -17,6 +17,17 @@ module "VPC" {
     source = "./VPC"
 }
 
+module "APIGateway" {
+    source = "./APIGateway"
+    invoke_arn = module.Lambda.invoke_arn
+}
+
+module "Lambda" {
+    source = "./Lambda"
+    lambda_role_arn = module.IAM.lambda_exec_role_arn
+    lambda_execution_arn = module.APIGateway.api_gateway_rest_api_execution_arn
+}
+
 module "RDS" {
     source     = "./RDS"
     vpc_id     = module.VPC.vpc_id
@@ -29,6 +40,5 @@ module "IAM" {
 
 module "AppRunner" {
     source = "./AppRunner"
-    instance_role_arn = module.IAM.role_arn
 }
 

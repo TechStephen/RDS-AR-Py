@@ -1,9 +1,5 @@
 resource "aws_apprunner_service" "ar_service" {
   service_name = "ar_service"
-  
-  instance_configuration {
-    instance_role_arn = var.instance_role_arn
-  }
 
   source_configuration {
     image_repository {

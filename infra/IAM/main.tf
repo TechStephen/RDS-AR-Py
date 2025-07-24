@@ -1,37 +1,50 @@
-resource "aws_iam_policy" "app_runner_policy" {
-  name        = "app-runner-policy"
-  description = "Policy for App Runner to access RDS and ECR"
-
-  policy = jsonencode({
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": "secretsmanager:GetSecretValue",
-      "Resource": "arn:aws:secretsmanager:us-east-1:123456789012:secret:rds/mysql/app-creds-*"
-    }
-  ]
-})
-}
-
-resource "aws_iam_role" "app_runner_role" {
-  name = "app-runner-role"
+# Role for lambda
+resource "aws_iam_role" "lambda_exec" {
+  name = "lambda_exec"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
-    Statement = [
-      {
+    Statement = [{
         Action = "sts:AssumeRole"
         Effect = "Allow"
         Principal = {
-          Service = "build.apprunner.amazonaws.com"
+            Service = "lambda.amazonaws.com"
         }
-      }
-    ]
-  }) 
+    }]
+  })
+  
 }
 
-resource "aws_iam_role_policy_attachment" "app_runner_policy_attachment" {
-  role       = aws_iam_role.app_runner_role.name
-  policy_arn = aws_iam_policy.app_runner_policy.arn
+# Iam Policy for RDS Access
+resource "aws_iam_policy" "lambda_policy" {
+  name = "lambda_policy"
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Action = [
+          "secretsmanager:GetSecretValue"
+        ],
+        Resource = "arn:aws:secretsmanager:us-east-1:123456789012:secret:rds/mysql/app-creds-*"
+      },
+      {
+        Effect = "Allow",
+        Action = [
+          "logs:CreateLogGroup",
+          "logs:CreateLogStream",
+          "logs:PutLogEvents"
+        ],
+        Resource = "*"
+      }
+    ]
+  })
+}
+
+
+# Attach lambda policy to role
+resource "aws_iam_role_policy_attachment" "lambda_policy_attachment" {
+    role = aws_iam_role.lambda_exec.name
+    policy_arn = aws_iam_policy.lambda_policy.arn
 }
