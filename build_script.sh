@@ -23,21 +23,22 @@ echo "🚀 Pushing Docker image to ECR..."
 docker push ${REPO}:${TAG}
 
 # Terraform deploy
-echo "🚧 Running Terraform deployment..."
-terraform init
-terraform validate
+# echo "🚧 Running Terraform deployment..."
+# terraform init
+# terraform validate
+# terraform plan
 
-set +e  # Allow failure so we can catch the error code manually
+# set +e  # Allow failure so we can catch the error code manually
 
-terraform apply -auto-approve
-EXIT_CODE=$?
+# terraform apply -auto-approve
+# EXIT_CODE=$?
 
-set -e  # Re-enable immediate exit
+# set -e  # Re-enable immediate exit
 
-if [ $EXIT_CODE -ne 0 ]; then
-  echo "❌ Terraform apply failed. Cleaning up..."
-  terraform destroy -auto-approve
-  exit 1
-fi
+# if [ $EXIT_CODE -ne 0 ]; then
+#   echo "❌ Terraform apply failed. Cleaning up..."
+#   terraform destroy -auto-approve
+#   exit 1
+# fi
 
-echo "✅ Terraform apply succeeded."
+# echo "✅ Terraform apply succeeded."

@@ -19,8 +19,8 @@ module "VPC" {
 
 module "RDS" {
     source     = "./RDS"
-    subnet_id  = module.VPC.subnet_id
     vpc_id     = module.VPC.vpc_id
+    subnet_group_name = module.VPC.subnet_group_name
 }
 
 module "IAM" {

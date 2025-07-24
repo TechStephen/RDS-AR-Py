@@ -4,6 +4,6 @@ WORKDIR /
 
 COPY app.py .
 
-RUN pip install boto3 pymysql json os
+RUN pip install boto3 pymysql
 
 CMD ["python", "app.py"]

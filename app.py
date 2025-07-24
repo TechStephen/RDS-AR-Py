@@ -9,7 +9,7 @@ def main():
     creds = get_db_credentials(os.getenv("SECRET_NAME", "rds/mysql/app-creds"))
     
     conn = pymysql.connect(
-        host=os.getenv("DB_HOST", "mydb-replica.abc123.us-east-1.rds.amazonaws.com"), # replace with your DB host
+        host=os.getenv("DB_HOST", "my-rds-instance.c5w0ymoi4zkm.us-east-1.rds.amazonaws.com:3306"), # replace with your DB host
         user=creds['username'],
         password=creds['password'],
         db="mydatabase"
