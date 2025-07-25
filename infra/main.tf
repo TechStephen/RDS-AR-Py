@@ -32,13 +32,15 @@ module "RDS" {
     source     = "./RDS"
     vpc_id     = module.VPC.vpc_id
     subnet_group_name = module.VPC.subnet_group_name
+
+    depends_on = [ module.VPC ]
 }
 
 module "IAM" {
     source = "./IAM"
 }
 
-module "AppRunner" {
-    source = "./AppRunner"
-}
+# module "AppRunner" {
+#     source = "./AppRunner"
+# }
 

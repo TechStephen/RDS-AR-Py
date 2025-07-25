@@ -27,7 +27,7 @@ resource "aws_iam_policy" "lambda_policy" {
         Action = [
           "secretsmanager:GetSecretValue"
         ],
-        Resource = "arn:aws:secretsmanager:us-east-1:123456789012:secret:rds/mysql/app-creds-*"
+        Resource = "arn:aws:secretsmanager:us-east-1:767398032512:secret:rds/mysql/app-creds-*"
       },
       {
         Effect = "Allow",
