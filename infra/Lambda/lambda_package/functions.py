@@ -40,7 +40,15 @@ class RDSAPI:
                         row_dict[col] = val
                     results.append(row_dict)
 
-                return {"statusCode": 200, "body": json.dumps(results)}
+                return {
+                    "statusCode": 200,
+                    "headers": {
+                        "Access-Control-Allow-Origin": "*",  # or your frontend domain
+                        "Access-Control-Allow-Methods": "GET,POST,OPTIONS",
+                        "Access-Control-Allow-Headers": "Content-Type"
+                    },
+                    "body": json.dumps(results)
+                }
         except Exception as e:
             print(f"Error fetching records: {e}")
             return {"statusCode": 500, "body": json.dumps({"error": str(e)})}
