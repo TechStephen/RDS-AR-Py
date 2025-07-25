@@ -1,4 +1,5 @@
-import boto3, json, pymysql, os
+import boto3, json, pymysql, os, datetime
+
 
 class RDSAPI:
     def __init__(self):
@@ -23,9 +24,23 @@ class RDSAPI:
     def get_all_records(self):
         try:
             with self.conn.cursor() as cursor:
-                cursor.execute("SELECT * FROM people")  # your table
+                cursor.execute("SELECT * FROM people")
                 rows = cursor.fetchall()
-                return {"statusCode": 200, "body": json.dumps(rows)}
+
+                # Get column names
+                columns = [desc[0] for desc in cursor.description]
+
+                # Convert rows to list of dicts
+                results = []
+                for row in rows:
+                    row_dict = {}
+                    for col, val in zip(columns, row):
+                        if isinstance(val, (datetime.date, datetime.datetime)):
+                            val = val.isoformat()
+                        row_dict[col] = val
+                    results.append(row_dict)
+
+                return {"statusCode": 200, "body": json.dumps(results)}
         except Exception as e:
             print(f"Error fetching records: {e}")
             return {"statusCode": 500, "body": json.dumps({"error": str(e)})}
